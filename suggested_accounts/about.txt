@@ -1,0 +1,1 @@
+this code is for instagram model lead scraping but using a manual target list to begin with, then scraping the suggested accounts of the target accounts. 

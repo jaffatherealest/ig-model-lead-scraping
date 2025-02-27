@@ -1,0 +1,1 @@
+this code is for instagram model lead scraping but using locations to scrape posts, then filtering the users that have posted and tagged a specific location. This means we can get super specific as to where the lead is or has visited.

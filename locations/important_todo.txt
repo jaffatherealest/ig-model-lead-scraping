@@ -1,0 +1,7 @@
+note to self
+
+the code files for business_network workflow are inside of locations folder and sharing the airtable.py and instagram.py files for their services. 
+
+These should be separated out into proper isolated folders. 
+
+i should also make a services folder for airtable.py & instagram.py etc and have all the other code files pull from this folder for there services functions. 

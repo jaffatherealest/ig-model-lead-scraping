@@ -345,35 +345,41 @@ def update_business_network_gender(record_id, update_data):
         print(f"Error updating post gender: {e}")
         return False
 
-def fetch_business_network_without_gender(offset=None, all_records=None):
+def fetch_business_network_without_gender():
     """
-    Function to fetch business network accounts that haven't been gender checked
+    Fetch business network accounts that haven't been gender checked.
+    Uses a while loop instead of recursion to prevent maximum recursion depth error.
     """
     
     url = f'https://api.airtable.com/v0/{AIRTABLE_BASE_ID}/{AIRTABLE_BUSINESS_NETWORK_TABLE}'
     headers = {
         'Authorization': f'Bearer {AIRTABLE_API_KEY}',
     }
-
-    if all_records is None:
-        all_records = []
-        
-    query_params = {
-        'filterByFormula': '{Gender Checked} != TRUE()'
-    }
-    if offset:
-        query_params['offset'] = offset
-
-    response = requests.get(url, headers=headers, params=query_params)
-    response.raise_for_status()
-    data = response.json()
     
-    all_records.extend(data.get('records', []))
-    
-    if 'offset' in data:
-        return fetch_business_network_without_gender(data['offset'], all_records)
-    else:
-        return all_records
+    all_records = []
+    offset = None
+
+    while True:
+        query_params = {
+            'filterByFormula': '{Gender Checked} != TRUE()'
+        }
+        if offset:
+            query_params['offset'] = offset
+
+        response = requests.get(url, headers=headers, params=query_params)
+        response.raise_for_status()
+        data = response.json()
+
+        all_records.extend(data.get('records', []))
+
+        # If there is no offset, break the loop (no more pages)
+        if 'offset' not in data:
+            break
+
+        # Set offset for next request
+        offset = data['offset']
+
+    return all_records
 
 def update_target_pagination_token(record_id, pagination_token):
     """
